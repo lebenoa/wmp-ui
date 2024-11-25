@@ -10,7 +10,6 @@
     import { title } from "$lib/store/title";
     import type { Session } from "$lib/types";
     import { queue } from "$lib/store/queue";
-    import { player } from "$lib/store/player";
     import { onMount } from "svelte";
 
     onMount(async () => {

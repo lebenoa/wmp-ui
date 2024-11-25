@@ -47,28 +47,51 @@
         </Sheet.Header>
         <div class="flex h-full flex-col overflow-y-auto">
             {#each $queue as track, idx}
-                <button
-                    on:click={() => {
-                        queue.seektoIndex(idx);
-                    }}
-                    use:scrollIf={track.title == $player.title}
-                    class="flex flex-row border !bg-opacity-50 transition-colors active:bg-primary lg:hover:bg-primary {track.title ==
-                    $player.title
-                        ? 'border-primary bg-secondary'
-                        : 'border-transparent'}"
-                >
-                    <div
-                        class="mr-2 flex aspect-square h-auto w-16 items-center justify-center bg-black"
+                <div class="relative flex h-full w-full flex-row items-center">
+                    <button
+                        on:click={() => {
+                            queue.seektoIndex(idx);
+                        }}
+                        use:scrollIf={track.title == $player.title}
+                        class="flex w-full flex-row border !bg-opacity-50 transition-colors active:bg-primary lg:hover:bg-primary {track.title ==
+                        $player.title
+                            ? 'border-primary bg-secondary'
+                            : 'border-transparent'}"
                     >
-                        <img src={track.thumbnail} alt={track.title} />
-                    </div>
-                    <div
-                        class="flex h-full w-full flex-col justify-around overflow-x-auto text-start"
+                        <div
+                            class="mr-2 flex aspect-square h-auto w-16 items-center justify-center bg-black"
+                        >
+                            <img src={track.thumbnail} alt={track.title} />
+                        </div>
+                        <div
+                            class="flex h-full w-full flex-col justify-around overflow-x-auto text-start"
+                        >
+                            <h3 class="text-nowrap font-bold">{track.title}</h3>
+                            <p class="text-nowrap text-muted-foreground">{track.artist}</p>
+                        </div>
+                    </button>
+                    <button
+                        on:click={() => {
+                            queue.removeFromQueue(idx);
+                        }}
+                        class="absolute right-2 p-1 transition-colors active:bg-primary lg:hover:bg-primary"
                     >
-                        <h3 class="text-nowrap font-bold">{track.title}</h3>
-                        <p class="text-nowrap text-muted-foreground">{track.artist}</p>
-                    </div>
-                </button>
+                        <svg
+                            xmlns="http://www.w3.org/2000/svg"
+                            width="24"
+                            height="24"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="2"
+                            stroke-linecap="round"
+                            stroke-linejoin="round"
+                        >
+                            <path d="M18 6 6 18" />
+                            <path d="m6 6 12 12" />
+                        </svg>
+                    </button>
+                </div>
             {/each}
         </div>
         <Sheet.Footer class="m-0">

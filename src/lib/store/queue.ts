@@ -11,8 +11,10 @@ function createQueueIndex() {
 	let queueValue: QueueItem[] = [];
 	const innerQueue = writable(queueValue);
 
-	function next() {
-		queueIndexValue += 1;
+	function next(plus: boolean = true) {
+		if (plus) {
+			queueIndexValue += 1;
+		}
 
 		if (queueIndexValue >= queueValue.length) {
 			queueIndexValue = -1;
@@ -63,7 +65,7 @@ function createQueueIndex() {
 		}
 	}
 
-	function removeFromQueue(index: number) {
+	async function removeFromQueue(index: number) {
 		if (queueValue.length === 0) {
 			return;
 		} else if (index >= queueValue.length) {
@@ -74,6 +76,18 @@ function createQueueIndex() {
 
 		queueValue.splice(index, 1);
 		innerQueue.set(queueValue);
+
+		if (queueIndexValue == index) {
+			next(false);
+
+			await fetch("/save-playlist", {
+				method: "POST",
+				headers: {
+					"Content-Type": "application/json"
+				},
+				body: JSON.stringify(queue.getSession())
+			});
+		}
 	}
 
 	function getSession(): Session {

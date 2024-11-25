@@ -90,6 +90,71 @@
                 Shuffle ALL local files to playlist
             </Command.Item>
         </Command.Group>
+        <Command.Group heading="Playlist">
+            <Command.Item
+                onSelect={async () => {
+                    let response = await fetch("/load-playlist");
+
+                    if (response.ok) {
+                        let data = await response.json();
+                        queue.setSession(data);
+                        open = false;
+                    }
+                }}
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="mr-2"
+                >
+                    <path d="m16 6-4-4-4 4" />
+                    <path d="M12 2v8" />
+                    <rect width="20" height="8" x="2" y="14" rx="2" />
+                    <path d="M6 18h.01" />
+                    <path d="M10 18h.01" />
+                </svg>
+                Load Playlist
+            </Command.Item>
+            <Command.Item
+                onSelect={async () => {
+                    await fetch("/save-playlist", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json"
+                        },
+                        body: JSON.stringify(queue.getSession())
+                    });
+                    open = false;
+                }}
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    class="mr-2"
+                >
+                    <path d="M12 2v8" />
+                    <path d="m16 6-4 4-4-4" />
+                    <rect width="20" height="8" x="2" y="14" rx="2" />
+                    <path d="M6 18h.01" />
+                    <path d="M10 18h.01" />
+                </svg>
+                Save Playlist
+            </Command.Item>
+        </Command.Group>
         <Command.Group heading="Misc">
             <Command.Item
                 onSelect={() => {
