@@ -13,11 +13,19 @@
     import { ScrollArea } from "$lib/components/ui/scroll-area";
     import * as Drawer from "$lib/components/ui/drawer";
     import RecentCard from "$lib/components/RecentCard.svelte";
-    import { fetchFilesAndHistory } from "$lib/files";
+    import { fetchFilesAndHistory, fetchGroupByArtist } from "$lib/files";
+    import GroupByArtist from "$lib/components/GroupByArtist.svelte";
+    import { groupByArtist } from "$lib/store/group-by-artist";
 
     let searchTerm = "";
 
-    let promise = fetchFilesAndHistory();
+    async function combined() {
+        fetchFilesAndHistory();
+        fetchGroupByArtist();
+    }
+
+    let promise = combined();
+
     let drawerState = false;
     let editMode = false;
     let activeSearchTimeout: number | undefined = undefined;
@@ -157,7 +165,56 @@
             </ScrollArea>
         </Collapsible.Content>
     </Collapsible.Root>
-    <FilesContainer data={$tracks} {searchTerm} {editMode} />
+    <Collapsible.Root open={true}>
+        <Collapsible.Trigger class="w-full text-start">
+            <div
+                class="mb-2 flex w-full flex-row justify-between border border-input px-4 py-1 transition-colors active:border-muted-foreground lg:hover:border-muted-foreground"
+            >
+                <p>Local Files</p>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="m18 15-6-6-6 6" />
+                </svg>
+            </div>
+        </Collapsible.Trigger>
+        <Collapsible.Content>
+            <FilesContainer data={$tracks} {searchTerm} {editMode} />
+        </Collapsible.Content>
+    </Collapsible.Root>
+    <Collapsible.Root>
+        <Collapsible.Trigger class="w-full text-start">
+            <div
+                class="mb-2 flex w-full flex-row justify-between border border-input px-4 py-1 transition-colors active:border-muted-foreground lg:hover:border-muted-foreground"
+            >
+                <p>Group by Artist</p>
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                >
+                    <path d="m18 15-6-6-6 6" />
+                </svg>
+            </div>
+        </Collapsible.Trigger>
+        <Collapsible.Content>
+            <GroupByArtist data={$groupByArtist} {searchTerm} />
+        </Collapsible.Content>
+    </Collapsible.Root>
 {:catch error}
     <p>Error: {error}</p>
 {/await}

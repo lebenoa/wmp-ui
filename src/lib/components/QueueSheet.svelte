@@ -47,7 +47,7 @@
         </Sheet.Header>
         <div class="flex h-full flex-col overflow-y-auto">
             {#each $queue as track, idx}
-                <div class="relative flex h-full w-full flex-row items-center">
+                <div class="relative flex w-full flex-row items-center">
                     <button
                         on:click={() => {
                             queue.seektoIndex(idx);
